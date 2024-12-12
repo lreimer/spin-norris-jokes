@@ -12,13 +12,13 @@ component = "random"
 
 [component.random]
 source = "random/target/random.wasm"
-exclude_files = ["**/node_modules"]
+exclude_files = ["random/**/node_modules"]
 allowed_outbound_hosts = ["https://api.chucknorris.io"]
 
 [component.random.build]
 command = "npm run build"
 workdir = "random"
-watch = ["src/**/*.ts", "package.json"]
+watch = ["src/*.ts", "package.json"]
 
 [[trigger.http]]
 route = "/api/jokes/categories"
@@ -26,10 +26,10 @@ component = "categories"
 
 [component.categories]
 source = "categories/target/categories.wasm"
-exclude_files = ["**/node_modules"]
+exclude_files = ["categories/**/node_modules"]
 allowed_outbound_hosts = ["https://api.chucknorris.io"]
 
 [component.categories.build]
 command = "npm run build"
 workdir = "categories"
-watch = ["src/**/*.ts", "package.json"]
+watch = ["src/*.ts", "package.json"]
