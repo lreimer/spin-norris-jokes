@@ -1,0 +1,35 @@
+spin_manifest_version = 2
+
+[application]
+authors = ["M.-Leander Reimer <mario-leander.reimer@qaware.de>"]
+description = "Spin WASM application to serve the Chuck Norris Jokes API as caching proxy"
+name = "spin-norris-jokes"
+version = "0.1.0"
+
+[[trigger.http]]
+route = "/api/jokes/random"
+component = "random"
+
+[component.random]
+source = "random/target/random.wasm"
+exclude_files = ["**/node_modules"]
+allowed_outbound_hosts = ["https://api.chucknorris.io"]
+
+[component.random.build]
+command = "npm run build"
+workdir = "random"
+watch = ["src/**/*.ts", "package.json"]
+
+[[trigger.http]]
+route = "/api/jokes/categories"
+component = "categories"
+
+[component.categories]
+source = "categories/target/categories.wasm"
+exclude_files = ["**/node_modules"]
+allowed_outbound_hosts = ["https://api.chucknorris.io"]
+
+[component.categories.build]
+command = "npm run build"
+workdir = "categories"
+watch = ["src/**/*.ts", "package.json"]
