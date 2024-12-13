@@ -1,0 +1,36 @@
+name: Build with NodeJS and Spin
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Use Node.js 20
+      uses: actions/setup-node@v4
+      with:
+        node-version: 20
+
+    - name: Setup `spin`
+      uses: fermyon/actions/spin/setup@v1
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        plugins: cloud,js2wasm
+
+    - name: NPM install
+      run: |
+        cd categories && npm install      
+        cd random && npm install      
+        cd search && npm install
+
+    - name: Spin Build
+      run: |
+        spin build
