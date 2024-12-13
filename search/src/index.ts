@@ -6,13 +6,24 @@ interface Joke {
 }
 
 export async function handler(req: Request, res: ResponseBuilder) {
+    let store = Kv.open("jokes");
+    
+    if (req.method === 'DELETE') {
+        console.log('Deleting all jokes.');
+        store.getKeys().forEach((key: string) => {
+            store.delete(key);
+        });
+
+        res.status(200).send('Refreshed all jokes.');
+        return;
+    }
+
     const requestUrl = new URL(req.url);
     const query = requestUrl.searchParams.get('query') || '';    
     const apiUrl = `https://api.chucknorris.io/jokes/search?query=${query}`;
 
     if (query === '') {
-        res.status(400);
-        res.send('No search query specified.');
+        res.status(400).send('No search query specified.');
         return;
     }
 
@@ -20,12 +31,10 @@ export async function handler(req: Request, res: ResponseBuilder) {
     const data = await response.json();
 
     if (data.status === 404) {
-        res.status(404);
-        res.send('No jokes found.');
+        res.status(404).send('No jokes found.');
         return;
     }
 
-    let store = Kv.open("jokes");
     await data.result.forEach((joke: Joke) => {
         console.log(`Caching joke ${joke.id} and value ${joke.value}`);
         store.set(joke.id, joke.value);
