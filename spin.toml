@@ -4,7 +4,7 @@ spin_manifest_version = 2
 authors = ["M.-Leander Reimer <mario-leander.reimer@qaware.de>"]
 description = "Spin WASM application to serve the Chuck Norris Jokes API as caching proxy"
 name = "spin-norris-jokes"
-version = "0.1.0"
+version = "0.2.0"
 
 [[trigger.http]]
 route = "/api/jokes/random"

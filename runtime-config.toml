@@ -1,3 +1,7 @@
+[key_value_store.default]
+type = "spin"
+path = ".spin/default.db"
+
 [key_value_store.jokes]
 type = "spin"
 path = ".spin/jokes.db"

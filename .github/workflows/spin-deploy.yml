@@ -1,0 +1,57 @@
+name: Deploy Spin Application
+
+on:
+  push:
+    tags: [ "v*.*.*" ]
+
+env:
+  # Use docker.io for Docker Hub if empty
+  REGISTRY: ghcr.io
+  # github.repository as <account>/<repo>
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      packages: write
+      id-token: write
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Use Node.js 20
+      uses: actions/setup-node@v4
+      with:
+        node-version: 20
+
+    - name: Install Task
+      uses: arduino/setup-task@v2
+      with:
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Setup `spin`
+      uses: fermyon/actions/spin/setup@v1
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        plugins: cloud,js2wasm
+
+    - name: Install NPM dependencies
+      run: |
+        task dependencies
+
+    - name: Build and push OCI image
+      uses: fermyon/actions/spin/push@v1
+      with:
+        registry: ${{ env.REGISTRY }}
+        registry_username: ${{ github.actor }}
+        registry_password: ${{ secrets.GITHUB_TOKEN }}
+        registry_reference: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.ref_name }}
+
+    - name: Deploy to Fermyon Cloud
+      uses: fermyon/actions/spin/deploy@v1
+      with:
+        run_build: false
+        fermyon_token: ${{ secrets.FERMYON_TOKEN }}
