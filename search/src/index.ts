@@ -1,4 +1,9 @@
-import { ResponseBuilder } from "@fermyon/spin-sdk";
+import { ResponseBuilder, Kv } from "@fermyon/spin-sdk";
+
+interface Joke {
+    id: string;
+    value: string;
+}
 
 export async function handler(req: Request, res: ResponseBuilder) {
     const requestUrl = new URL(req.url);
@@ -7,20 +12,24 @@ export async function handler(req: Request, res: ResponseBuilder) {
 
     if (query === '') {
         res.status(400);
-        res.send('No query specified.');
+        res.send('No search query specified.');
         return;
     }
 
     const response = await fetch(apiUrl);
     const data = await response.json();
 
-    console.log(`Received ${JSON.stringify(data)}`);
     if (data.status === 404) {
         res.status(404);
         res.send('No jokes found.');
         return;
     }
 
-    // TODO handle total count and result array properly
-    res.send(data.total);
+    let store = Kv.open("jokes");
+    await data.result.forEach((joke: Joke) => {
+        console.log(`Caching joke ${joke.id} and value ${joke.value}`);
+        store.set(joke.id, joke.value);
+    });
+
+    res.send(`Found and cached ${data.total} jokes.`);
 }
