@@ -11,7 +11,7 @@ export async function handler(req: Request, res: ResponseBuilder) {
     console.log(`Received ${JSON.stringify(data)}`);
     if (data.status === 404) {
         res.status(404);
-        res.send('No joke found.');
+        res.send('No jokes found.');
         return;
     }
 

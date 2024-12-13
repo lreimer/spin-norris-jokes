@@ -1,7 +1,7 @@
 {
     "name": "random",
     "version": "1.0.0",
-    "description": "",
+    "description": "Retrieve a random chuck joke",
     "main": "index.js",
     "scripts": {
         "build": "npx webpack --mode=production && npx mkdirp target && npx j2w -i dist.js -d combined-wit -n combined -o target/random.wasm ",
