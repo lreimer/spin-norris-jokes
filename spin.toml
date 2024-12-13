@@ -28,6 +28,7 @@ component = "categories"
 source = "categories/target/categories.wasm"
 exclude_files = ["categories/**/node_modules"]
 allowed_outbound_hosts = ["https://api.chucknorris.io"]
+key_value_stores = ["default"]
 
 [component.categories.build]
 command = "npm run build"
