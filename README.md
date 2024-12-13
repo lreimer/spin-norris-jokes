@@ -5,21 +5,23 @@ Spin WASM application to serve the Chuck Norris Jokes API as caching proxy.
 ## Setup and Install requirements 
 
 ```bash
-cd random
-npm install
-
-cd categories
-npm install
+# install required tools via Brewfile
+brew bundle
+task dependencies
 ```
 
 ## Building and Running locally
 
-```
+```bash
+# use either of the following two commands
 spin up --build
 spin watch
 
-http get http://127.0.0.1:3000/api/jokes/random
+# call the endpoints
 http get http://127.0.0.1:3000/api/jokes/categories
+http get http://127.0.0.1:3000/api/jokes/random
+http get http://127.0.0.1:3000/api/jokes/random category==explicit
+http get http://127.0.0.1:3000/api/jokes/search query==Germany
 ```
 
 ## Maintainer
