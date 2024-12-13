@@ -4,8 +4,15 @@ on:
   workflow_dispatch:
   push:
     branches: [ "main" ]
+    tags: [ "v*.*.*" ]
   pull_request:
     branches: [ "main" ]
+
+env:
+  # Use docker.io for Docker Hub if empty
+  REGISTRY: ghcr.io
+  # github.repository as <account>/<repo>
+  IMAGE_NAME: ${{ github.repository }}
 
 jobs:
   build:
@@ -37,3 +44,11 @@ jobs:
     - name: Spin Build
       run: |
         spin build
+
+    - name: Build and push OCI image
+      uses: fermyon/actions/spin/push@v1
+      with:
+        registry: ${{ env.REGISTRY }}
+        registry_username: ${{ github.actor }}
+        registry_password: ${{ secrets.GITHUB_TOKEN }}
+        registry_reference: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:main
