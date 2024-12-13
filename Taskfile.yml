@@ -14,13 +14,13 @@ tasks:
     aliases: [w, dev]
     silent: true
     cmds:
-      - spin watch
+      - spin watch --runtime-config-file=runtime-config.toml
 
   up:
     aliases: [u]
     silent: true
     cmds:
-      - spin up --build
+      - spin up --build --runtime-config-file=runtime-config.toml
 
   build:
     aliases: [b]
