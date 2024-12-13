@@ -33,3 +33,17 @@ allowed_outbound_hosts = ["https://api.chucknorris.io"]
 command = "npm run build"
 workdir = "categories"
 watch = ["src/*.ts", "package.json"]
+
+[[trigger.http]]
+route = "/api/jokes/search"
+component = "search"
+
+[component.search]
+source = "search/target/search.wasm"
+exclude_files = ["search/**/node_modules"]
+allowed_outbound_hosts = ["https://api.chucknorris.io"]
+
+[component.search.build]
+command = "npm run build"
+workdir = "search"
+watch = ["src/*.ts", "package.json"]
