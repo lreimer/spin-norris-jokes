@@ -1,0 +1,29 @@
+version: '3'
+
+dotenv: ['.env', '{{.HOME}}/.env']
+
+tasks:
+  dependencies:
+    aliases: [d, deps]
+    cmds:
+      - cd categories && npm install
+      - cd random && npm install
+      - cd search && npm install
+  
+  watch:
+    aliases: [w, dev]
+    silent: true
+    cmds:
+      - spin watch
+
+  up:
+    aliases: [u]
+    silent: true
+    cmds:
+      - spin up --build
+
+  build:
+    aliases: [b]
+    silent: true
+    cmds:
+      - spin build

@@ -19,17 +19,20 @@ jobs:
       with:
         node-version: 20
 
+    - name: Install Task
+      uses: arduino/setup-task@v2
+      with:
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
+
     - name: Setup `spin`
       uses: fermyon/actions/spin/setup@v1
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         plugins: cloud,js2wasm
 
-    - name: NPM install
+    - name: Install NPM dependencies
       run: |
-        cd categories && npm install      
-        cd random && npm install      
-        cd search && npm install
+        task dependencies
 
     - name: Spin Build
       run: |
